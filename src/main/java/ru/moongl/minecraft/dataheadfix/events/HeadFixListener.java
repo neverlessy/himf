@@ -1,16 +1,14 @@
 package ru.moongl.minecraft.dataheadfix.events;
 
 import com.jeff_media.customblockdata.CustomBlockData;
-import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,31 +35,26 @@ public class HeadFixListener implements Listener {
                 final ItemStack newItems = new ItemStack(Material.PLAYER_HEAD, 1);
                 newItems.setItemMeta(itemMeta);
 
-                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), newItems);
+                if (event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), newItems);
+                }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-
             customBlockData.remove(getItemHeadKey());
         }
     }
 
     @EventHandler
     public void onPlayerPlace(BlockPlaceEvent event) {
-
         if (event.getHand() != EquipmentSlot.HAND) return;
-
         if(event.getPlayer().getInventory().getItemInMainHand().getType() == Material.PLAYER_HEAD) {
-
             setItemHeadKey(new NamespacedKey(Dataheadfix.getInstance(), "k"));
-
             final ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
             if (itemStack.getAmount() == 0) return;
             final Block block = event.getBlockPlaced();
-
             final PersistentDataContainer customBlockData = new CustomBlockData(block, Dataheadfix.getInstance());
 
-            // Преобразовываем itemStack в массив байт
             byte[] encodedItem;
             try {
                 encodedItem = ItemSerializer.toBytes(itemStack);
@@ -70,10 +63,7 @@ public class HeadFixListener implements Listener {
                 return;
             }
 
-            // Устанавливаем в PersistentDataContainer наш массив байтов из itemstack
             customBlockData.set(getItemHeadKey(), PersistentDataType.BYTE_ARRAY, encodedItem);
-
-
 
         }
     }
