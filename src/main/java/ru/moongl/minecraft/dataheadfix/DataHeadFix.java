@@ -4,16 +4,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.moongl.minecraft.dataheadfix.events.HeadFixListener;
 
 
-public final class Dataheadfix extends JavaPlugin {
+public final class DataHeadFix extends JavaPlugin {
 
-    private static Dataheadfix instance;
+    private static DataHeadFix instance;
 
     @Override
     public void onEnable() {
         instance = this;
 
         getServer().getPluginManager().registerEvents(new HeadFixListener(), getInstance());
-
     }
 
     @Override
@@ -21,7 +20,7 @@ public final class Dataheadfix extends JavaPlugin {
 
     }
 
-    public static Dataheadfix getInstance() {
+    public static DataHeadFix getInstance() {
         return instance;
     }
 }

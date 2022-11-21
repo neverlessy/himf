@@ -1,6 +1,6 @@
 name: DataHeadFix
 version: '${project.version}'
-main: ru.moongl.minecraft.dataheadfix.Dataheadfix
+main: ru.moongl.minecraft.dataheadfix.DataHeadFix
 api-version: 1.19
 authors: [ neverlessy, MoonGlance ]
 description: Correction of the disappearance of the skin of the head when installing / breaking the block
